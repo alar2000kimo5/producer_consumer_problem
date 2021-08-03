@@ -6,7 +6,7 @@ public class Fresher extends Employee {
 
 	private PhoneCenter pc;
 
-	private int status = 0;
+	//private int status = 0;
 
 	private String empName = "Fresher";
 
@@ -20,16 +20,16 @@ public class Fresher extends Employee {
 		this.pc = pc;
 	}
 
-	@Override
-	public int getStatus() {
-
-		return status;
-	}
-
-	@Override
-	public void setStatus(int status) {
-		this.status = status;
-	}
+//	@Override
+//	public int getStatus() {
+//
+//		return status;
+//	}
+//
+//	@Override
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
 
 	@Override
 	public String getEmpName() {

@@ -6,6 +6,8 @@ import main.phoneCenter.PhoneCenter;
 import main.producer.AnyTypeWork;
 
 public abstract class Employee implements Runnable {
+	
+	private int status = 0;
 
 	public abstract PhoneCenter getPhoneCenter();
 
@@ -65,9 +67,14 @@ public abstract class Employee implements Runnable {
 		}).start();
 	}
 
-	public abstract int getStatus();
 
-	public abstract void setStatus(int status);
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	/* 簡單判斷是否成功， 給各個職位實作 */
 	public abstract boolean isSuccess() throws InterruptedException;
