@@ -1,39 +1,10 @@
 package main.consumer;
 
-import main.phoneCenter.PhoneCenter;
-
 public class PM extends Employee {
-
-	private PhoneCenter pc;
-
-	//private int status = 0;
-
-	private String empName = "PM";
-
-	@Override
-	public PhoneCenter getPhoneCenter() {
-		return pc;
-	}
-
-	@Override
-	public void setPhoneCenter(PhoneCenter pc) {
-		this.pc = pc;
-	}
-
-//	@Override
-//	public int getStatus() {
-//
-//		return status;
-//	}
-//
-//	@Override
-//	public void setStatus(int status) {
-//		this.status = status;
-//	}
 
 	@Override
 	public String getEmpName() {
-		return empName;
+		return "PM";
 	}
 
 	@Override

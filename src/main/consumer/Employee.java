@@ -6,18 +6,24 @@ import main.phoneCenter.PhoneCenter;
 import main.producer.AnyTypeWork;
 
 public abstract class Employee implements Runnable {
-	
+
 	private int status = 0;
-
-	public abstract PhoneCenter getPhoneCenter();
-
-	public abstract void setPhoneCenter(PhoneCenter pc);
+	
+	private PhoneCenter pc;
 
 	/* 服務者名稱 */
 	public abstract String getEmpName();
 
 	/* 當無法服務時，傳給下個服務者名稱 */
 	public abstract String getNextTranName();
+
+	public PhoneCenter getPhoneCenter() {
+		return pc;
+	}
+
+	public void setPhoneCenter(PhoneCenter pc) {
+		this.pc = pc;
+	}
 
 	@Override
 	public void run() {
@@ -66,7 +72,6 @@ public abstract class Employee implements Runnable {
 			}
 		}).start();
 	}
-
 
 	public int getStatus() {
 		return status;
