@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import main.phoneCenter.PhoneCenter;
 import main.producer.AnyTypeWork;
 
-public abstract class Employee implements Runnable {
+public abstract class Employee  {
 
 	private int status = 0;
 	
@@ -25,40 +25,26 @@ public abstract class Employee implements Runnable {
 		this.pc = pc;
 	}
 
-	@Override
-	public void run() {
+	public void doWork() {
 		PhoneCenter pc = getPhoneCenter();
 		LinkedBlockingQueue<AnyTypeWork> this_que = pc.getCallQueue_byEmpName(getEmpName());
 		LinkedBlockingQueue<AnyTypeWork> next_que = pc.getCallQueue_byEmpName(getNextTranName());
-		while (true) {
-			try {
-				Thread.sleep(1000); // 每秒檢查一次通話狀態
 
-				AnyTypeWork anyTypeWork = this_que.poll();
-				if (anyTypeWork != null) {
-					if (getStatus() == 0) {
-						setStatus(1);
-						dowork(next_que, anyTypeWork);
-					} else {
-						System.out.println(
-								getEmpName() + Thread.currentThread().getId() + "服務中.. 轉接給 " + getNextTranName());
-						next_que.offer(anyTypeWork);
-					}
-				}
-
-				if (pc.checkAllAndStopService()) {
-					System.out.println(getEmpName() + "服務停止");
-					break; // return true then stop service
-				}
-
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		AnyTypeWork anyTypeWork = this_que.poll();
+		if (anyTypeWork != null) {
+			if (getStatus() == 0) {
+				setStatus(1);
+				dowork(next_que, anyTypeWork);
+			} else {
+				System.out.println(
+						getEmpName() + Thread.currentThread().getId() + "服務中.. 轉接給 " + getNextTranName());
+				next_que.offer(anyTypeWork);
 			}
 		}
 	}
 
 	private void dowork(LinkedBlockingQueue<AnyTypeWork> next_que, AnyTypeWork anyTypeWork) {
-		new Thread(() -> {
+		new Thread(() -> { // 其實這邊不需要fork出去做事情, 用同個thread做事就好了, 也因此status其實形同虛設
 			try {
 				boolean isSuccess = isSuccess();
 				if (!isSuccess) {
