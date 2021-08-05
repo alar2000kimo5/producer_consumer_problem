@@ -5,10 +5,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import main.phoneCenter.PhoneCenter;
 import main.producer.AnyTypeWork;
 
-public abstract class Employee  {
+public abstract class Employee {
 
 	private int status = 0;
-	
+
 	private PhoneCenter pc;
 
 	/* 服務者名稱 */
@@ -36,15 +36,14 @@ public abstract class Employee  {
 				setStatus(1);
 				dowork(next_que, anyTypeWork);
 			} else {
-				System.out.println(
-						getEmpName() + Thread.currentThread().getId() + "服務中.. 轉接給 " + getNextTranName());
+				System.out.println(getEmpName() + Thread.currentThread().getId() + "服務中.. 轉接給 " + getNextTranName());
 				next_que.offer(anyTypeWork);
 			}
 		}
 	}
 
 	private void dowork(LinkedBlockingQueue<AnyTypeWork> next_que, AnyTypeWork anyTypeWork) {
-		new Thread(() -> { // 其實這邊不需要fork出去做事情, 用同個thread做事就好了, 也因此status其實形同虛設
+		new Thread(() -> { // fork出去做事，為了造成服務中狀態，讓電話轉接到下一位
 			try {
 				boolean isSuccess = isSuccess();
 				if (!isSuccess) {
@@ -52,9 +51,10 @@ public abstract class Employee  {
 							.println(getEmpName() + Thread.currentThread().getId() + "服務失敗.. 轉接給 " + getNextTranName());
 					next_que.offer(anyTypeWork);
 				}
-				setStatus(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} finally {
+				setStatus(0); // 最後要切換狀態，不然報錯就永遠卡住
 			}
 		}).start();
 	}
