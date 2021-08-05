@@ -47,7 +47,22 @@ public class ApplicationMain {
 		LinkedBlockingQueue<? extends Employee> empque = pc.getEmpQueue();
 		ExecutorService emp = Executors.newFixedThreadPool(empque.size()); 
 		for (Employee em : empque) {
-			emp.execute(em);
+			emp.execute(() -> {
+				while (true) {
+					try {
+						Thread.sleep(1000); // 每秒檢查一次通話狀態
+
+						em.doWork();
+
+						if (pc.checkAllAndStopService()) {
+							System.out.println(em.getEmpName() + "服務停止");
+							break; // return true then stop service
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 		while (true) {
 			if (pc.checkAllAndStopService()) {
